@@ -1,0 +1,26 @@
+aidl_interface {
+    name: "com.nada.gpio",
+    vendor_available: true,
+    srcs: ["interfaces/**/*.aidl"],
+    local_include_dir: "interfaces",
+    owner: "com.nada.gpio",
+    backend: {
+        java: {
+            enabled: true,
+            platform_apis: true,
+        },
+        cpp: {
+            enabled: true,
+        },
+        ndk: {
+            enabled: true,
+        },
+    },
+    frozen: false,
+    versions_with_info: [
+        {
+            version: "1",
+            imports: [],
+        },
+    ],
+}

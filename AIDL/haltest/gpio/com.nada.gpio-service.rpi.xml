@@ -1,0 +1,7 @@
+<manifest version="1.0" type="device">
+    <hal format="aidl">
+        <name>com.luxoft.gpio</name>
+        <version>1</version>
+        <fqname>IGpioService/default</fqname>
+    </hal>
+</manifest>

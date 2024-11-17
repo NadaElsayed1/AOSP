@@ -1,0 +1,11 @@
+on early-boot
+    chown system system /sys/class/gpio/*
+    chmod 777 /sys/class/gpio/r*
+
+service gpio_service /vendor/bin/hw/gpio_service
+	class hal
+	user root
+	group root
+
+on boot
+	start gpio_service
