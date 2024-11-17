@@ -50,7 +50,7 @@ Next, we want to upgrade the system to use Java by calling `set` and `get` metho
 
 ---
 
-![Alt Text](/images/01.png)
+![Alt Text](images/01.png)
 
 for this part: Configuration Explained
 
@@ -83,7 +83,7 @@ These configurations are essential for applications requiring precise analog mea
 now under the rpi4 folder lets create our package -> (hal/gpio)
 we inspire that from light pakage
 
-![Alt Text](/images/02.png)
+![Alt Text](images/02.png)
 
 as the main.cpp file is the service function
 light.cpp, light.h is the interface implementation
@@ -91,7 +91,7 @@ xml file is the descriptor file of aidl that system need
 rc file 
 like that:
 
-![Alt Text](/images/03.png)
+![Alt Text](images/03.png)
 
 and the last file is bp file put here he didn't put the aidl file or its related files 
 these remaining files is at vendor/overlays/aidl 
@@ -307,7 +307,7 @@ or  using feature visiblity and apply this feature for other people
 
 ok to rearrange or work flow this is our new hierarchy:
 
-![Alext](/images/08.png)
+![Alext](images/08.png)
 
 
 now let's build at 3 steps: so at first we need to generate to it it's first version which should have its hash using (freeze) and then update pakages to makesure that every thing is ok finally i should generate from aidl file its cpp,h files 
@@ -329,9 +329,9 @@ interface IGpioService {
 	boolean getGpioState(int pin);
 }
 ```
-![Alt Text](/images/10.png)
+![Alt Text](images/10.png)
 
-![Alt Text](/images/11.png)
+![Alt Text](images/11.png)
 
 this part appear at our bp files:
 ```sh
@@ -344,36 +344,36 @@ this part appear at our bp files:
 ```
 `frozen: true,` this line may throw error so we will handle that later
 
-![Alt Text](/images/12.png)
+![Alt Text](images/12.png)
 
-![Alt Text](/images/13.png)
-![Alt Text](/images/14.png)
+![Alt Text](images/13.png)
+![Alt Text](images/14.png)
 
 here is our hash generated and its a frozen version:
 
-![Alt Text](/images/15.png)
+![Alt Text](images/15.png)
 
 2) `make com.nada.gpio-update-api` to generate current folder from last version on our package
 
-![Alt Text](/images/6.png)
-![Alt Text](/images/17.png)
+![Alt Text](images/6.png)
+![Alt Text](images/17.png)
 
 3) let's now use our aidl tool `aidl-cpp -h` `-h` to now how to use
 
-![Alt Text](/images/18.png)
-![Alt Text](/images/19.png)
+![Alt Text](images/18.png)
+![Alt Text](images/19.png)
 
 it take generally INPUT HEADER_DIR OUTPUT: so input aidl path (take it by right click on IGpioService and copy path) and space then copy it again without file name(to specify where it should put the generated header files) and again paste the path without aidl file name (to specify where should put the generated .cpp files) for notice this syntax isn't right the terminal will describe that:
 for my case it looks like: 
 ```sh
 aidl-cpp /media/iti/468469bc-700b-47e2-ad57-0efb9731e806/android-14.0.0_r67/device/brcm/rpi4/haltest/gpio/interfaces/com/nada/gpio/IGpioService.aidl /media/iti/468469bc-700b-47e2-ad57-0efb9731e806/android-14.0.0_r67/device/brcm/rpi4/haltest/gpio/interfaces/com/nada/gpio/ /media/iti/468469bc-700b-47e2-ad57-0efb9731e806/android-14.0.0_r67/device/brcm/rpi4/haltest/gpio/interfaces/com/nada/gpio/
 ```
-![Alt Text](/images/20.png)
+![Alt Text](images/20.png)
 
 so here it announced me to add `/com/nada/gpio/IGpioService.cpp` to the output file
 here we go
 
-![Alt Text](/images/21.png)
+![Alt Text](images/21.png)
 
 
 
