@@ -51,6 +51,7 @@ Next, we want to upgrade the system to use Java by calling `set` and `get` metho
 ---
 
 ![Alt Text](/images/01.png)
+
 for this part: Configuration Explained
 
 ### I2C Settings
@@ -81,17 +82,21 @@ These configurations are essential for applications requiring precise analog mea
 
 now under the rpi4 folder lets create our package -> (hal/gpio)
 we inspire that from light pakage
+
 ![Alt Text](/images/02.png)
+
 as the main.cpp file is the service function
 light.cpp, light.h is the interface implementation
 xml file is the descriptor file of aidl that system need
 rc file 
 like that:
+
 ![Alt Text](/images/03.png)
+
 and the last file is bp file put here he didn't put the aidl file or its related files 
 these remaining files is at vendor/overlays/aidl 
 
-
+sh```
 aosp/
 ├── build/
 ├── device/
@@ -101,7 +106,7 @@ aosp/
 │   ├── qualcomm/
 │   ├── mediatek/
 │   └── <other vendors>/
-
+```
 
 now let's put our hal files at lib folder and i will put on it gpiohal.h, gpiohal.cpp
 and at the same gpio folder we will put 2 folders (manifest,sepolicy)custom folders
@@ -119,6 +124,7 @@ If you intend to use a specific functionality, like a GPIO HAL (Hardware Abstrac
 To make the GPIO HAL reusable, it should be separated into its own library. This involves creating header files (e.g., gpiohal.h) and source files (e.g., gpiohal.cpp) and placing them in a structured directory.
 Directory Example:
 
+sh```
 aosp/
 ├── hal/
 │   ├── gpio/
@@ -127,12 +133,14 @@ aosp/
 │   │   │   ├── gpiohal.cpp     # Source file with function implementations
 │   │   ├── manifest/           # Contains HAL manifest for this module
 │   │   ├── sepolicy/           # Security policy configurations
+```
 
 2. Create a Blueprint File for the Library
 
 Blueprint files (Android.bp) are essential for defining how to build the module within AOSP. For the gpiohal library, create a blueprint file in the same folder (hal/gpio/lib/).
 Example Android.bp for gpiohal
 
+sh```
 cc_library {
     name: "libgpiohal",
     srcs: [
@@ -149,7 +157,7 @@ cc_library {
     srcs: Specifies the source files (e.g., gpiohal.cpp) to compile.
     shared_libs: Lists shared libraries that the module depends on.
     export_include_dirs: Makes the header files available for other modules.
-
+```
 3. Include the External Module in Another Service
 
 To use the gpiohal library in another service:
@@ -162,10 +170,12 @@ Example:
 Imagine a service called gpiocontrol located in hal/gpio/service/.
 Service File Structure
 
+sh```
+
 hal/gpio/service/
 ├── main.cpp           # Service logic
 ├── Android.bp         # Blueprint file for the service
-
+```
 Modify Android.bp for gpiocontrol
 
 sh```
@@ -211,10 +221,12 @@ If you plan to use the library as an external module, include it in the parent d
 
 For example:
 
+sh```
 vendor/myvendor/external_gpio/
 ├── Android.bp         # External library blueprint
 ├── gpiohal.h
 ├── gpiohal.cpp
+```
 
 Blueprint for external usage:
 
@@ -253,17 +265,18 @@ let's now the main fuction for interface
 i could merge the main and implementation
 
 ![Alt Text](/images/07.png)
+
 untill now this is the hierarchy
 
 ![Alt Text](/images/06.png)
+
 these are the 2 methods should be implemented inside the service
 and take in considration package is: `package com.luxoft.gpio;` so folders should be com/luxoft/gpio (reverse name)
 at the bp file : let's put our package as name: com.luxoft.gpio, vendor_available : true to be located at vendor partation or at older releases the service would be found under /ODM , srcs: "interfaces/**/*.aidl" to access .aidl files should go through this hierarchy
 
-    local_include_dir: "interfaces",
+`local_include_dir: "interfaces",`
 and this isn't so important
 is typically used in an Android.bp file to specify a single local directory containing aidl files (.h) that are needed for compiling the current module.
-
 
 
 Unlike local_include_dirs, which allows specifying multiple directories in a list, local_include_dir is used to define just one directory. The specified directory is relative to the location of the Android.bp file.
@@ -317,6 +330,7 @@ interface IGpioService {
 }
 ```
 ![Alt Text](/images/10.png)
+
 ![Alt Text](/images/11.png)
 
 this part appear at our bp files:
@@ -329,21 +343,26 @@ this part appear at our bp files:
     ],
 ```
 `frozen: true,` this line may throw error so we will handle that later
+
 ![Alt Text](/images/12.png)
 
 ![Alt Text](/images/13.png)
 ![Alt Text](/images/14.png)
 
 here is our hash generated and its a frozen version:
+
 ![Alt Text](/images/15.png)
 
 2) `make com.nada.gpio-update-api` to generate current folder from last version on our package
+
 ![Alt Text](/images/6.png)
 ![Alt Text](/images/17.png)
 
 3) let's now use our aidl tool `aidl-cpp -h` `-h` to now how to use
+
 ![Alt Text](/images/18.png)
 ![Alt Text](/images/19.png)
+
 it take generally INPUT HEADER_DIR OUTPUT: so input aidl path (take it by right click on IGpioService and copy path) and space then copy it again without file name(to specify where it should put the generated header files) and again paste the path without aidl file name (to specify where should put the generated .cpp files) for notice this syntax isn't right the terminal will describe that:
 for my case it looks like: 
 ```sh
@@ -353,6 +372,7 @@ aidl-cpp /media/iti/468469bc-700b-47e2-ad57-0efb9731e806/android-14.0.0_r67/devi
 
 so here it announced me to add `/com/nada/gpio/IGpioService.cpp` to the output file
 here we go
+
 ![Alt Text](/images/21.png)
 
 
